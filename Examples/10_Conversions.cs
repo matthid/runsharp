@@ -78,12 +78,11 @@ namespace TriAxis.RunSharp.Examples
 					// Call the explicit conversion from numeral to int. Because it is
 					// an explicit conversion, a cast must be used:
 					g.WriteLine(numeral.Cast(typeof(int)));
-
+                    
 					// Call the implicit conversion to string. Because there is no
 					// cast, the implicit conversion to string is the only
 					// conversion that is considered:
 					g.WriteLine(numeral);
-
 					// Call the explicit conversion from numeral to int and 
 					// then the explicit conversion from int to short:
 					Operand s = g.Local(numeral.Cast(typeof(short)));

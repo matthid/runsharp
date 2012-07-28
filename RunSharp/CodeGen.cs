@@ -40,7 +40,6 @@ namespace TriAxis.RunSharp
 		ILGenerator GetILGenerator();
 
 		Type OwnerType { get; }
-		bool SupportsScopes { get; }
 	}
 
 	public partial class CodeGen
@@ -54,8 +53,6 @@ namespace TriAxis.RunSharp
 		LocalBuilder retVar = null;
 		Label retLabel;
 		Stack<Block> blocks = new Stack<Block>();
-		Dictionary<string, Label> Labels = new Dictionary<string, Label>();
-		Dictionary<string, Operand> NamedLocals = new Dictionary<string, Operand>();
 
 		internal ILGenerator IL { get { return il; } }
 		internal ICodeGenContext Context { get { return context; } }
@@ -64,11 +61,6 @@ namespace TriAxis.RunSharp
 		{
 			this.context = context;
 			this.cg = context as ConstructorGen;
-
-			if (cg != null && cg.IsStatic)
-				// #14 - cg is relevant for instance constructors - it wreaks havoc in a static constructor
-				cg = null;
-
 			il = context.GetILGenerator();
 		}
 
@@ -403,42 +395,6 @@ namespace TriAxis.RunSharp
 					return true;
 				}
 			}
-		}
-
-		public Operand this[string localName] // Named locals support. 
-		{
-			get
-			{
-				Operand target;
-				if (!NamedLocals.TryGetValue(localName, out target))
-					throw new InvalidOperationException(Properties.Messages.ErrUninitializedVarAccess);
-				return target;
-			}
-			set
-			{
-				Operand target;
-				if (NamedLocals.TryGetValue(localName, out target))
-					// run in statement form; C# left-to-right evaluation semantics "just work"
-					Assign(target, value);
-				else
-					NamedLocals.Add(localName, Local(value));
-			}
-		}
-
-		public void Label(string labelName)
-		{
-			Label label;
-			if (!Labels.TryGetValue(labelName, out label))
-				Labels.Add(labelName, label = IL.DefineLabel());
-			IL.MarkLabel(label);
-		}
-
-		public void Goto(string labelName)
-		{
-			Label label;
-			if (!Labels.TryGetValue(labelName, out label))
-				Labels.Add(labelName, label = IL.DefineLabel());
-			IL.Emit(OpCodes.Br, label);
 		}
 	}
 }

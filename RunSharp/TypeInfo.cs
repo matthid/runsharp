@@ -81,8 +81,7 @@ namespace TriAxis.RunSharp
 			{
 				lock (cache)
 				{
-					WeakReference wr;
-					if (cache.TryGetValue(t, out wr) && (wr.Target == this || wr.Target == null))
+					if (cache[t].Target == this || cache[t].Target == null)
 						cache.Remove(t);
 				}
 			}
@@ -358,7 +357,7 @@ namespace TriAxis.RunSharp
 			throw new MissingMethodException(Properties.Messages.ErrMissingMethod);
 		}
 
-		class StdMethodInfo : IMemberInfo
+	    class StdMethodInfo : IMemberInfo
 		{
 			MethodBase mb;
 			MethodInfo mi;

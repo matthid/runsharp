@@ -35,7 +35,7 @@ namespace TriAxis.RunSharp.Operands
 		ApplicableFunction method;
 		Operand target;
 		Operand[] args;
-
+        
 		public Invocation(ApplicableFunction method, Operand target, Operand[] args)
 		{
 			this.method = method;

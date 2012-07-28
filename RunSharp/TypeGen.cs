@@ -559,6 +559,11 @@ namespace TriAxis.RunSharp
 			ResetAttrs();
 			return tg;
 		}
+
+        public DelegateGen Delegate(Type returnType, string name)
+        {
+            return new DelegateGen(this, name, returnType, (typeVis | typeVirt | typeFlags | TypeAttributes.Sealed | TypeAttributes.SequentialLayout) ^ TypeAttributes.BeforeFieldInit);
+        }
 		#endregion
 
 		#region Interface implementations
@@ -785,6 +790,15 @@ namespace TriAxis.RunSharp
 		{
 			get { return indexerName; }
 		}
-		#endregion
+
+	    internal AssemblyGen Owner
+	    {
+	        get
+	        {
+	            return owner;
+	        }
+	    }
+
+	    #endregion
 	}
 }

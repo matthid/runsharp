@@ -95,6 +95,12 @@ namespace TriAxis.RunSharp
 			return new TypeLiteral(type);
 		}
 
+        [DebuggerHidden]
+        public static implicit operator Operand(MethodInfo methodInfo)
+        {
+            return new MethodInfoLiteral(methodInfo);
+        }
+
 		[DebuggerHidden]
 		public static implicit operator Operand(string value)
 		{
@@ -721,7 +727,7 @@ namespace TriAxis.RunSharp
 			return new Invocation(TypeInfo.FindMethod(Type, name, args, IsStaticTarget), this, args);
 		}
 
-		public Operand InvokeDelegate()
+	    public Operand InvokeDelegate()
 		{
 			return InvokeDelegate(Operand.EmptyArray);
 		}

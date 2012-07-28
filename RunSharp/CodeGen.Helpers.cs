@@ -270,7 +270,15 @@ namespace TriAxis.RunSharp
 
 					case TypeCode.Double:
 						return OpCodes.Stind_R8;
-
+                    case TypeCode.Object:
+                        if (type == typeof(IntPtr))
+                        {
+                            return OpCodes.Stobj;
+                        }
+                        else
+	                    {
+                            goto default;
+	                    }
 					default:
 						throw new NotSupportedException();
 				}

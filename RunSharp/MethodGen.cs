@@ -32,7 +32,9 @@ namespace TriAxis.RunSharp
 {
 	public sealed class MethodGen : RoutineGen<MethodGen>
 	{
-		string name;
+	    private readonly TypeGen owner;
+
+	    string name;
 		MethodAttributes attributes;
 		MethodBuilder mb;
 		MethodImplAttributes implFlags;
@@ -47,13 +49,16 @@ namespace TriAxis.RunSharp
 		internal MethodGen(TypeGen owner, string name, MethodAttributes attributes, Type returnType, MethodImplAttributes implFlags)
 			: base(owner, returnType)
 		{
-			this.name = name;
-			this.attributes = owner.PreprocessAttributes(this, attributes);
-			this.implFlags = implFlags;
+		    this.owner = owner;
+		    this.name = name;
+		    this.attributes = attributes;
+		    this.implFlags = implFlags;
 		}
 
 		protected override void CreateMember()
-		{
+        {
+            this.attributes = owner.PreprocessAttributes(this, attributes);
+
 			string methodName = name;
 
 			if (interfaceType != null)

@@ -32,6 +32,8 @@ namespace TriAxis.RunSharp
 	public class DelegateGen : SignatureGen<DelegateGen>
 	{
 		AssemblyGen owner;
+
+	    private TypeGen owner2;
 		string name;
 		TypeAttributes attrs;
 		TypeGen delegateType;
@@ -44,6 +46,15 @@ namespace TriAxis.RunSharp
 			this.name = name;
 			this.attrs = attrs;
 		}
+
+        public DelegateGen(TypeGen typeGen, string name, Type returnType, TypeAttributes typeAttributes)
+            : base(returnType)
+        {
+            this.owner2 = typeGen;
+            this.name = name;
+            this.attrs = typeAttributes;
+
+        }
 
 		protected override System.Reflection.Emit.ParameterBuilder DefineParameter(int position, System.Reflection.ParameterAttributes attributes, string parameterName)
 		{
@@ -89,8 +100,16 @@ namespace TriAxis.RunSharp
 
 		TypeGen ImplementDelegate()
 		{
-			TypeGen tg = new TypeGen(owner, name, attrs, typeof(MulticastDelegate), Type.EmptyTypes);
-
+		    TypeGen tg;
+		    if (owner == null)
+		    {
+                tg = new TypeGen(owner2, name, attrs, typeof(MulticastDelegate), Type.EmptyTypes);
+		    }
+		    else
+		    {
+                tg = new TypeGen(owner, name, attrs, typeof(MulticastDelegate), Type.EmptyTypes);
+		    }
+			
 			ConstructorBuilder cb = tg.Public.RuntimeImpl.Constructor()
 				.Parameter(typeof(object), "object")
 				.Parameter(typeof(IntPtr), "method")

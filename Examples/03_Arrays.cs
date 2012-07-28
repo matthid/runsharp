@@ -48,7 +48,7 @@ namespace TriAxis.RunSharp.Examples
 
 					// Create the jagged array
 					Operand i = g.Local();
-					g.For(i.Assign(0), i < scores.ArrayLength(), i.Increment());
+                    g.For(i.Assign(0), i < scores.ArrayLength(), i.Increment());
 					{
 						g.Assign(scores[i], Exp.NewArray(typeof(byte), i + 3));
 					}
